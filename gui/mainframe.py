@@ -8,7 +8,7 @@ if '../' not in sys.path:
     sys.path.append('../')
 import PyQt5
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QFileDialog
 from PyQt5.QtCore import pyqtSignal
 # from PyQt5.QtCore import *
 # from PyQt5.QtGui import *
@@ -18,6 +18,7 @@ from ui_templates.ui_mainframe import Ui_main_frame
 from manager.taskmanager import TaskManager
 from typesdefine import Task, Enterprise
 from utils import debug
+from db.excel import PyExcel
 from multiprocessing import freeze_support
 # for cx_freeze fixed
 sys.stdout = open('run.log', 'a')
@@ -51,9 +52,6 @@ class MainFrame(QDialog):
         # end __init__
         self.signalCreatedSuccessful.connect(self.onCreatedSuccessful)
         self.signalCreatedSuccessful.emit()
-
-    def on_actionExportToExcel_triggered(self):
-        debug.info('actionExportToExcel')
 
     def output(self, msg):
         self.ui.lw_output.addItem(msg)
@@ -208,24 +206,55 @@ class MainFrame(QDialog):
         return action
 
     def contextMenuEvent(self, event):
-        # debug.info('right event x %s ,y %s' % (event.x(), event.y()))
-        #
         curItem = None
         indexTab = self.ui.tbwg_menubar.currentIndex()
         # finished tasks
+
         if 2 == indexTab:
             curItem = self.ui.lw_finished_tasks.currentItem()
             if not curItem:
+                debug.error('There is no select items %s' % curItem)
                 return
-            action = self.createMenuForFinishedTasks(self)
+            popMenu = QtWidgets.QMenu()
+            popMenu.addAction(self.actionExportToExcel)
+            action = popMenu.exec(self.cursor().pos())
+            if not action:
+                return
+
             if action == self.actionExportToExcel:
                 self.onExportToExcel(curItem.text())
+            else:
+                debug.info('action error')
+    
         if 1 == indexTab:
             pass
 
     # actions
-    def onExportToExcel(self, taskName):
-        debug.info('%s on export to excel' % taskName)
+    def onExportToExcel(self, taskname):
+        # self.titles, self.tabmap = tabmap
+        self.taskManager.resetDb('%s.db' % taskname)
+        if taskname not in self.taskResult.keys():
+            objects = Enterprise.objects().all()
+        else:
+            objects = self.taskResult[taskname]
+        titles = sorted(self.tabmap.items(),
+                        key=lambda item: item[1])
+
+        options = QFileDialog.Options()
+        # options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getSaveFileName(self,
+                                                  "QFileDialog",
+                                                  '%s.xls' % taskname,
+                                                  "All Files (*);;Excel(.xls)",
+                                                  options=options)
+
+        if os.path.exists(fileName):
+            return
+        pyExcel = PyExcel(fileName,
+                          self.tabmap,
+                          [i for i, j in titles],
+                          objects)
+        pyExcel.save()
 
 
 def main():

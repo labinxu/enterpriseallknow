@@ -13,14 +13,13 @@ class PyExcel(object):
     def _fillExcel(self, sheet, objects):
         for row, ent in enumerate(objects):
             for name, var in vars(ent).items():
-                sheet.write(row, self.tabmap[name], var)
+                sheet.write(row+1, self.tabmap[name], var)
 
     def save(self):
         wb = xlwt3.Workbook()
         sheet = wb.add_sheet(self.sheetName)
-        self
         for col, title in enumerate(self.title):
             sheet.write(0, col, title)
 
-        self._fillExcel(sheet, self.data)
+        self._fillExcel(sheet, self.objects)
         wb.save(self.filename)
