@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainframe.ui'
 #
-# Created: Wed Sep 10 17:46:45 2014
+# Created: Wed Sep 10 20:43:34 2014
 #      by: PyQt5 UI code generator 5.3.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(764, 698)
+        MainWindow.resize(710, 502)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -31,29 +31,23 @@ class Ui_MainWindow(object):
         self.tab_running_tasks.setObjectName("tab_running_tasks")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.tab_running_tasks)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.groupBox_tasks = QtWidgets.QGroupBox(self.tab_running_tasks)
-        self.groupBox_tasks.setMaximumSize(QtCore.QSize(191, 16777215))
-        self.groupBox_tasks.setObjectName("groupBox_tasks")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_tasks)
+        self.groupBox_2 = QtWidgets.QGroupBox(self.tab_running_tasks)
+        self.groupBox_2.setMaximumSize(QtCore.QSize(231, 16777215))
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_2)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.lw_processing_tasks = QtWidgets.QTableWidget(self.groupBox_tasks)
-        self.lw_processing_tasks.setMinimumSize(QtCore.QSize(171, 0))
-        self.lw_processing_tasks.setMaximumSize(QtCore.QSize(171, 16777215))
+        self.lw_processing_tasks = TaskRunningTable(self.groupBox_2)
+        self.lw_processing_tasks.setMinimumSize(QtCore.QSize(100, 0))
+        self.lw_processing_tasks.setMaximumSize(QtCore.QSize(300, 16777215))
         self.lw_processing_tasks.setObjectName("lw_processing_tasks")
-        self.lw_processing_tasks.setColumnCount(1)
-        self.lw_processing_tasks.setRowCount(4)
-        item = QtWidgets.QTableWidgetItem()
-        self.lw_processing_tasks.setVerticalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.lw_processing_tasks.setVerticalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.lw_processing_tasks.setVerticalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.lw_processing_tasks.setVerticalHeaderItem(3, item)
+        self.lw_processing_tasks.setColumnCount(2)
+        self.lw_processing_tasks.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.lw_processing_tasks.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.lw_processing_tasks.setHorizontalHeaderItem(1, item)
         self.verticalLayout.addWidget(self.lw_processing_tasks)
-        self.horizontalLayout_3.addWidget(self.groupBox_tasks)
+        self.horizontalLayout_3.addWidget(self.groupBox_2)
         self.groupBox_4 = QtWidgets.QGroupBox(self.tab_running_tasks)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_4)
@@ -106,7 +100,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.groupBox)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 764, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 710, 23))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -117,7 +111,6 @@ class Ui_MainWindow(object):
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
-        MainWindow.insertToolBarBreak(self.toolBar)
         self.actionOpen = QtWidgets.QAction(MainWindow)
         self.actionOpen.setObjectName("actionOpen")
         self.menuFile.addAction(self.actionOpen)
@@ -127,22 +120,20 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.lw_processing_tasks, self.tw_processing_task_details)
+        MainWindow.setTabOrder(self.tw_processing_task_details, self.lw_finished_tasks)
+        MainWindow.setTabOrder(self.lw_finished_tasks, self.tabWidget)
+        MainWindow.setTabOrder(self.tabWidget, self.tw_finished_task_details)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_new_task), _translate("MainWindow", "New Task"))
-        self.groupBox_tasks.setTitle(_translate("MainWindow", "Tasks"))
-        item = self.lw_processing_tasks.verticalHeaderItem(0)
-        item.setText(_translate("MainWindow", "新建任务1"))
-        item = self.lw_processing_tasks.verticalHeaderItem(1)
-        item.setText(_translate("MainWindow", "新建行"))
-        item = self.lw_processing_tasks.verticalHeaderItem(2)
-        item.setText(_translate("MainWindow", "新建行"))
-        item = self.lw_processing_tasks.verticalHeaderItem(3)
-        item.setText(_translate("MainWindow", "新建行"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "Tasks"))
         item = self.lw_processing_tasks.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "新建列"))
+        item.setText(_translate("MainWindow", "任务"))
+        item = self.lw_processing_tasks.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "进度"))
         self.groupBox_4.setTitle(_translate("MainWindow", "Task Details"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_running_tasks), _translate("MainWindow", "Running Tasks"))
         self.groupBox_3.setTitle(_translate("MainWindow", "Tasks"))
@@ -163,3 +154,4 @@ class Ui_MainWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpen.setText(_translate("MainWindow", "open"))
 
+from taskrunningtable import TaskRunningTable

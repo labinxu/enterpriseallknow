@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>764</width>
-    <height>698</height>
+    <width>710</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,10 +38,10 @@
           </attribute>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QGroupBox" name="groupBox_tasks">
+            <widget class="QGroupBox" name="groupBox_2">
              <property name="maximumSize">
               <size>
-               <width>191</width>
+               <width>231</width>
                <height>16777215</height>
               </size>
              </property>
@@ -50,42 +50,27 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QTableWidget" name="lw_processing_tasks">
+               <widget class="TaskRunningTable" name="lw_processing_tasks">
                 <property name="minimumSize">
                  <size>
-                  <width>171</width>
+                  <width>100</width>
                   <height>0</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>171</width>
+                  <width>300</width>
                   <height>16777215</height>
                  </size>
                 </property>
-                <row>
-                 <property name="text">
-                  <string>新建任务1</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>新建行</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>新建行</string>
-                 </property>
-                </row>
-                <row>
-                 <property name="text">
-                  <string>新建行</string>
-                 </property>
-                </row>
                 <column>
                  <property name="text">
-                  <string>新建列</string>
+                  <string>任务</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>进度</string>
                  </property>
                 </column>
                </widget>
@@ -188,8 +173,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>764</width>
-     <height>21</height>
+     <width>710</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -209,7 +194,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
    <addaction name="separator"/>
   </widget>
@@ -219,6 +204,20 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TaskRunningTable</class>
+   <extends>QTableWidget</extends>
+   <header>taskrunningtable.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>lw_processing_tasks</tabstop>
+  <tabstop>tw_processing_task_details</tabstop>
+  <tabstop>lw_finished_tasks</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>tw_finished_task_details</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
  <designerdata>

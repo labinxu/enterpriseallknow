@@ -11,43 +11,27 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-#        btn = QtWidgets.QPushButton(self.ui.lw_processing_tasks)
-#        btn.setText('12/1/12')
-#        self.ui.lw_processing_tasks.setCellWidget(0, 0, btn)
-        
-#        self.ui.lw_processing_tasks.setCellWidget(1, 0, btn)
+        self.ui.lw_processing_tasks.insertRow(0)
         pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
+        pc.setTextVisible(False)
         pc.setRange(0, 100)
         pc.setValue(10)
-        self.ui.lw_processing_tasks.setCellWidget(0, 0, pc)
+        self.ui.lw_processing_tasks.setCellWidget(0, 1, pc)
+
+        self.ui.lw_processing_tasks.insertRow(1)
         pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
+        pc.setTextVisible(False)
         pc.setRange(0, 100)
         pc.setValue(20)
-        self.ui.lw_processing_tasks.setCellWidget(1, 0, pc)
-        
+        self.ui.lw_processing_tasks.setCellWidget(1, 1, pc)
+        self.ui.lw_processing_tasks.insertRow(2)
         pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
+        pc.setTextVisible(False)
         pc.setRange(0, 100)
         pc.setValue(30)
-        self.ui.lw_processing_tasks.setCellWidget(2, 0, pc)
-        
-        pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
-        pc.setRange(0, 100)
-        pc.setValue(40)
-        self.ui.lw_processing_tasks.setCellWidget(3, 0, pc)
-        
-        self.ui.lw_processing_tasks.insertRow(4)
-        pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
-        pc.setRange(0, 100)
-        pc.setValue(50)
-        
-        self.ui.lw_processing_tasks.insertRow(5)
-        self.ui.lw_processing_tasks.setCellWidget(4, 0, pc)
-        pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
-        pc.setRange(0, 100)
-        pc.setValue(60)
-        self.ui.lw_processing_tasks.setCellWidget(5, 0, pc)
+        self.ui.lw_processing_tasks.setCellWidget(2, 1, pc)
+        pc.setTextVisible(False)
 
-        print(self.ui.lw_processing_tasks.verticalHeaderItem(3).text())
 
 def main():
     import sys
