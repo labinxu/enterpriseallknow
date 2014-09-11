@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>502</height>
+    <width>718</width>
+    <height>555</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>2</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tab_new_task">
           <attribute name="title">
@@ -122,19 +122,19 @@
           <attribute name="title">
            <string>Running Tasks</string>
           </attribute>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
            <item>
             <widget class="QGroupBox" name="groupBox_2">
              <property name="maximumSize">
               <size>
-               <width>231</width>
+               <width>280</width>
                <height>16777215</height>
               </size>
              </property>
              <property name="title">
               <string>Tasks</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout">
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
               <item>
                <widget class="TaskRunningTable" name="lw_processing_tasks">
                 <property name="minimumSize">
@@ -244,8 +244,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>710</width>
-     <height>21</height>
+     <width>718</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

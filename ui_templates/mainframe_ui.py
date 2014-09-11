@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainframe.ui'
 #
-# Created: Thu Sep 11 17:48:27 2014
+# Created: Thu Sep 11 21:25:09 2014
 #      by: PyQt5 UI code generator 5.3.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(710, 502)
+        MainWindow.resize(718, 555)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -74,13 +74,13 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.tab_new_task, "")
         self.tab_running_tasks = QtWidgets.QWidget()
         self.tab_running_tasks.setObjectName("tab_running_tasks")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.tab_running_tasks)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.tab_running_tasks)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab_running_tasks)
-        self.groupBox_2.setMaximumSize(QtCore.QSize(231, 16777215))
+        self.groupBox_2.setMaximumSize(QtCore.QSize(250, 16777215))
         self.groupBox_2.setObjectName("groupBox_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_2)
-        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_2)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.lw_processing_tasks = TaskRunningTable(self.groupBox_2)
         self.lw_processing_tasks.setMinimumSize(QtCore.QSize(100, 0))
         self.lw_processing_tasks.setMaximumSize(QtCore.QSize(300, 16777215))
@@ -91,8 +91,8 @@ class Ui_MainWindow(object):
         self.lw_processing_tasks.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.lw_processing_tasks.setHorizontalHeaderItem(1, item)
-        self.verticalLayout.addWidget(self.lw_processing_tasks)
-        self.horizontalLayout_3.addWidget(self.groupBox_2)
+        self.horizontalLayout_3.addWidget(self.lw_processing_tasks)
+        self.horizontalLayout_8.addWidget(self.groupBox_2)
         self.groupBox_4 = QtWidgets.QGroupBox(self.tab_running_tasks)
         self.groupBox_4.setObjectName("groupBox_4")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_4)
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.tw_processing_task_details.setColumnCount(0)
         self.tw_processing_task_details.setRowCount(0)
         self.verticalLayout_3.addWidget(self.tw_processing_task_details)
-        self.horizontalLayout_3.addWidget(self.groupBox_4)
+        self.horizontalLayout_8.addWidget(self.groupBox_4)
         self.tabWidget.addTab(self.tab_running_tasks, "")
         self.tab_completed_tasks = QtWidgets.QWidget()
         self.tab_completed_tasks.setObjectName("tab_completed_tasks")
@@ -139,7 +139,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.groupBox)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 710, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 718, 23))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -157,7 +157,7 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
         self.lw_finished_tasks.itemClicked['QListWidgetItem*'].connect(MainWindow.onLWFinishedTasksItemClicked)
         self.pb_Ok.clicked.connect(MainWindow.onNewTask)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

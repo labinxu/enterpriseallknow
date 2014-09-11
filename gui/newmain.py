@@ -5,7 +5,7 @@ import os
 import threading
 import time
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import (QAction, QFileDialog, QMessageBox)
+from PyQt5.QtWidgets import (QAction, QFileDialog)
 from PyQt5.QtGui import (QIcon, QKeySequence)
 from PyQt5.QtCore import pyqtSignal
 from db.excel import PyExcel
@@ -38,10 +38,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.createToolbar()
         self.initTableTitles()
         self.initSignals()
+        self.changeStyle('Windows')
 
+        # ###################################
         self.signalCreatedSuccessful.connect(self.onCreatedSuccessful)
         self.signalCreatedSuccessful.emit()
-    
+
+    def changeStyle(self, styleName):
+        style = QtWidgets.QStyleFactory.create(styleName)
+        QtWidgets.QApplication.setStyle(style)
+
     def initTaskManager(self):
         # task relations
         self.taskManager = TaskManager()
