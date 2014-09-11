@@ -25,12 +25,98 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="tab_new_task">
           <attribute name="title">
            <string>New Task</string>
           </attribute>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>站点：</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="lb_current_site">
+               <property name="minimumSize">
+                <size>
+                 <width>75</width>
+                 <height>23</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <underline>true</underline>
+                </font>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="text">
+                <string>ali</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QLabel" name="lb_task_name">
+               <property name="text">
+                <string>任务名称:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="le_task_name"/>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QLabel" name="lb_search_conditions">
+               <property name="text">
+                <string>搜索关键字：</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="le_search_keywords"/>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QPushButton" name="pb_Ok">
+               <property name="text">
+                <string>确定</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pb_Cancel">
+               <property name="text">
+                <string>清空</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="tab_running_tasks">
           <attribute name="title">
@@ -117,21 +203,6 @@
                   <height>16777215</height>
                  </size>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>新建项目</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>新建项目</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>新建项目</string>
-                 </property>
-                </item>
                </widget>
               </item>
              </layout>
@@ -174,7 +245,7 @@
      <x>0</x>
      <y>0</y>
      <width>710</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -219,7 +290,40 @@
   <tabstop>tw_finished_task_details</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>lw_finished_tasks</sender>
+   <signal>itemClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onLWFinishedTasksItemClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>354</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pb_Ok</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onNewTask()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>558</x>
+     <y>390</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>354</x>
+     <y>250</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <designerdata>
   <property name="gridDeltaX">
    <number>10</number>
@@ -237,4 +341,8 @@
    <bool>true</bool>
   </property>
  </designerdata>
+ <slots>
+  <slot>onLWFinishedTasksItemClicked()</slot>
+  <slot>onNewTask()</slot>
+ </slots>
 </ui>

@@ -4,7 +4,7 @@ import os
 import time
 from typesdefine import Task
 import importlib
-from multiprocessing import Process, Queue, Value, Manager
+from multiprocessing import Process, Queue, Manager
 import psutil
 import sys
 if '../' not in sys.path:
@@ -34,15 +34,13 @@ class TaskManager(object):
 
     def taskMonitor(self):
         debug.info('start task monitor')
-
-        while True:
-            # TaskManager.newtask_cond.acquire()
-            task = self.new_tasks.get()
-            if task is None:
-                self.running_tasks.put((None, 0))
-                break
+        task = self.new_tasks.get()
+        while task is not None:
             debug.info('received task %s' % task.task_name)
             self.startTask(task, self.running_tasks_status)
+            task = self.new_tasks.get()
+
+        self.running_tasks.put((None, 0))
 
     def startTask(self, task, progressStatus):
         crawler = self.getSiteParser(task.task_site_name)

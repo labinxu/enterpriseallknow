@@ -3,6 +3,7 @@
 Thumbs.db
 #Ignore files build by Visual Studio
 *.pyc
+*.pyo
 *.obj
 *.pdb
 *.user
@@ -19,6 +20,7 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.db
 [Bb]in
 *.lib
 *.sbr
