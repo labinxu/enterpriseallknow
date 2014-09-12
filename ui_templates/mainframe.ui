@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>555</height>
+    <width>720</width>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -196,7 +196,7 @@
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <widget class="QListWidget" name="lw_finished_tasks">
+               <widget class="ListWidget" name="lw_finished_tasks">
                 <property name="maximumSize">
                  <size>
                   <width>171</width>
@@ -244,17 +244,34 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>718</width>
-     <height>23</height>
+     <width>720</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>文件</string>
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionDelete"/>
+    <addaction name="actionDeleteFromDisk"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionDebug"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -274,12 +291,43 @@
     <string>open</string>
    </property>
   </action>
+  <action name="actionDebug">
+   <property name="text">
+    <string>调试</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="actionDeleteFromDisk">
+   <property name="text">
+    <string>从磁盘删除</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>TaskRunningTable</class>
    <extends>QTableWidget</extends>
-   <header>taskrunningtable.h</header>
+   <header>tablewidgetwithprocess.h</header>
+   <slots>
+    <signal>cellContextClicked(QTableWidgetItem*)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>ListWidget</class>
+   <extends>QListWidget</extends>
+   <header>listwidget.h</header>
+   <slots>
+    <signal>cellContextClicked(QListWidgetItem*)</signal>
+   </slots>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -295,7 +343,7 @@
    <sender>lw_finished_tasks</sender>
    <signal>itemClicked(QListWidgetItem*)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onLWFinishedTasksItemClicked()</slot>
+   <slot>onFinishedTasksItemClicked()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>125</x>
@@ -323,6 +371,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lw_processing_tasks</sender>
+   <signal>cellContextClicked(QTableWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onProcessTasksRClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>169</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lw_finished_tasks</sender>
+   <signal>cellContextClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onFinishedTasksRClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tabWidget</sender>
+   <signal>tabBarClicked(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onTabBarClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>358</x>
+     <y>283</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>358</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <designerdata>
   <property name="gridDeltaX">
@@ -342,7 +438,10 @@
   </property>
  </designerdata>
  <slots>
-  <slot>onLWFinishedTasksItemClicked()</slot>
+  <slot>onFinishedTasksItemClicked()</slot>
   <slot>onNewTask()</slot>
+  <slot>onProcessTasksRClicked()</slot>
+  <slot>onFinishedTasksRClicked()</slot>
+  <slot>onTabBarClicked()</slot>
  </slots>
 </ui>

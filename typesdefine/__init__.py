@@ -25,3 +25,15 @@ class Task(DBModel):
     task_site_name = CharField(max_length=10)
     task_web_url = CharField(max_length=100)
     task_status = CharField(max_length=2)
+    task_progress = CharField(max_length=4)
+
+
+def MakeTaskObj(obj):
+    task = Task(task_name=obj.task_name,
+                task_search_words=obj.task_search_words,
+                task_site_name=obj.task_site_name,
+                task_web_url=obj.task_web_url,
+                task_status=obj.task_status,
+                task_progress=obj.task_progress)
+    task.id = obj.id
+    return task

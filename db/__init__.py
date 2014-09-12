@@ -13,12 +13,14 @@ class DBOperator(object):
     def execute(self, sql):
         cursor = self.db.cursor()
         cursor.execute(sql)
+        debug.debug(sql)
         self.db.commit()
 
     def select(self, sql):
         try:
             cursor = self.db.cursor()
             cursor.execute(sql)
+            debug.debug(sql)
             return cursor.fetchall()
         except sqlite3.OperationalError as e:
             debug.error(str(e))
@@ -167,7 +169,7 @@ class DBModel(with_metaclass(ModelBase)):
         try:
             return DBHelper.getInstance()
         except Exception as e:
-            # print('get DB helper error %s' % str(e))
+            debug.error(str(e))
             pass
 
     def __init__(self, *args, **kwargs):

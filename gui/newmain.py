@@ -7,13 +7,14 @@ import time
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (QAction, QFileDialog)
 from PyQt5.QtGui import (QIcon, QKeySequence)
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from db.excel import PyExcel
 from utils import debug
-from typesdefine import (Task, Enterprise)
+from typesdefine import (Task, MakeTaskObj, Enterprise)
 from manager.taskmanager import TaskManager
 from ui_templates.mainframe_ui import Ui_MainWindow
 from multiprocessing import freeze_support
+from functools import partial
 # for cx_freeze fixed
 sys.stdout = open('run.log', 'a')
 sys.stderr = sys.stdout
@@ -43,6 +44,23 @@ class MainWindow(QtWidgets.QMainWindow):
         # ###################################
         self.signalCreatedSuccessful.connect(self.onCreatedSuccessful)
         self.signalCreatedSuccessful.emit()
+
+        # for dbug
+        # self.appendTask('task1')
+        # self.appendTask('task2')
+        # self.appendTask('task3')
+        # self.appendFinished('finishedTask1')
+        # self.appendFinished('finishedTask2')
+        # self.appendFinished('finishedTask3')
+
+    @pyqtSlot()
+    def on_actionDebug_triggered(self):
+        if debug.getLevel() == 10:
+            debug.setLevel(20)
+            self.ui.statusbar.clearMessage()
+        else:
+            debug.setLevel(10)
+            self.ui.statusbar.showMessage("debug mode")
 
     def changeStyle(self, styleName):
         style = QtWidgets.QStyleFactory.create(styleName)
@@ -85,6 +103,9 @@ class MainWindow(QtWidgets.QMainWindow):
         for i, value in enumerate(self.tabTitles):
             self.tabmap[value[0]] = i
 
+    def appendFinished(self, taskname):
+        self.ui.lw_finished_tasks.addItem(taskname)
+
     def onTaskCompleted(self, taskname):
         debug.info('task %s finished' % taskname)
         count = self.ui.lw_processing_tasks.rowCount()
@@ -92,27 +113,88 @@ class MainWindow(QtWidgets.QMainWindow):
             item = self.ui.lw_processing_tasks.item(i, 0)
             if item.text() == taskname:
                 self.ui.lw_processing_tasks.removeRow(i)
-                self.ui.lw_finished_tasks.addItem(taskname)
+                self.appendFinished(taskname)
                 break
-
-        # model = self.ui.lw_processing_tasks.model()
-        # for i in range(self.ui.lw_processing_tasks.count()):
-        #     item = self.ui.lw_processing_tasks.item(i)
-        #     if item.text() == taskname:
-        #         model.removeRow(i)
-        #         self.ui.lw_finished_tasks.addItem(taskname)
-        #         break
 
     def onCreatedSuccessful(self):
         self.initTaskManager()
         threading.Thread(target=self.guiMonitor, args=()).start()
         threading.Thread(target=self.updateTaskProgress, args=()).start()
 
+        self.onTabBarClicked(self.ui.tabWidget.currentIndex())
+
     def closeEvent(self, event):
-        debug.info('received close evnet')
+        debug.info('received close event')
         self.taskManager.addTask(None)
         self.stop = True
-        event.accept()
+        return event.accept()
+    # ##################################################################
+    # widget operator
+
+    def onFinishedTasksItemClicked(self, item):
+        taskname = item.text()
+        self.taskManager.resetDb('%s.db' % taskname)
+        if taskname not in self.taskResult.keys():
+            objects = Enterprise.objects().all()
+            self.taskResult[taskname] = objects
+        else:
+            objects = self.taskResult[taskname]
+        self._fillCompaniesTable(self.ui.tw_finished_task_details, objects)
+
+    def onProcessTasksRClicked(self, item):
+        self.actionRestart = QAction('Restart', self,
+                                     triggered=partial(self.restartTask, item))
+
+        self.actionStopTask = QAction('Stop', self,
+                                      triggered=partial(self.stopTask, item))
+
+        self.actionStopTaskAll = QAction('StopAll', self,
+                                         triggered=self.stopTaskAll)
+
+        popMenu = QtWidgets.QMenu()
+        popMenu.addAction(self.actionRestart)
+        popMenu.addAction(self.actionStopTask)
+        popMenu.addAction(self.actionStopTaskAll)
+        popMenu.exec(self.cursor().pos())
+
+    def onFinishedTasksRClicked(self, item):
+        popMenu = QtWidgets.QMenu()
+        trigger = partial(self.exportToExcel, item)
+        self.actionExportToExcel = QAction('ExportToExcel', self,
+                                           triggered=trigger)
+
+        trigger = partial(self.deleteTask, item)
+        self.actionDeleteTask = QAction('Delete', self,
+                                        triggered=trigger)
+
+        trigger = partial(self.deleteTaskFromDisk, item)
+        self.actionDeleteTaskFromDisk = QAction('DeleteFromDisk', self,
+                                                triggered=trigger)
+
+        popMenu.addAction(self.actionExportToExcel)
+        popMenu.addSeparator()
+
+        popMenu.addAction(self.actionDeleteTask)
+        popMenu.addAction(self.actionDeleteTaskFromDisk)
+        popMenu.exec(self.cursor().pos())
+
+    def onTabBarClicked(self, index):
+        # self._promptMessage(self.ui.tabWidget.tabText(index))
+
+        if index == 1:
+            self.taskManager.resetDb('tasks.db')
+            # self.ui.lw_processing_tasks.clear()
+            self.ui.lw_processing_tasks.setRowCount(0)
+            tasks = Task.objects().filter('task_status="0"')
+            for task in tasks:
+                self.appendTask(task)
+
+        elif index == 2:
+            self.taskManager.resetDb('tasks.db')
+            self.ui.lw_finished_tasks.clear()
+            tasks = Task.objects().filter('task_status="1"')
+            for task in tasks:
+                self.ui.lw_finished_tasks.addItem(task.task_name)
 
     # #######################################################################
     def _fillCompaniesTable(self, tableWidget, objects):
@@ -126,58 +208,56 @@ class MainWindow(QtWidgets.QMainWindow):
                 tableWidget.setItem(row, self.tabmap[name], item)
             row += 1
 
-    def onLWFinishedTasksItemClicked(self, item):
-        taskname = item.text()
-        self.taskManager.resetDb('%s.db' % taskname)
-        if taskname not in self.taskResult.keys():
-            objects = Enterprise.objects().all()
-            self.taskResult[taskname] = objects
-        else:
-            objects = self.taskResult[taskname]
-        self._fillCompaniesTable(self.ui.tw_finished_task_details, objects)
-
     # ##########################################################################
 
-    def appendTask(self, taskName):
+    def appendTask(self, task):
+        taskName = task.task_name
         index = self.ui.lw_processing_tasks.rowCount()
         self.ui.lw_processing_tasks.insertRow(index)
         pc = QtWidgets.QProgressBar(self.ui.lw_processing_tasks)
         pc.setTextVisible(False)
         pc.setRange(0, 100)
-        pc.setValue(0)
+        pc.setValue(1)
         item = QtWidgets.QTableWidgetItem()
         item.setText(taskName)
         self.ui.lw_processing_tasks.setItem(index, 0, item)
         self.ui.lw_processing_tasks.setCellWidget(index, 1, pc)
 
     def hasSameTask(self, taskName):
-        if os.path.exists('%s.db' % taskName):
-            return False
-        return True
+        self.taskManager.resetDb('tasks.db')
+        tasks = Task.objects().filter('task_name="%s"' % taskName)
+        if tasks:
+            return True
+        return False
 
     def onNewTask(self):
-        self.ui.le_task_name.setText('r1')
+
         taskName = self.ui.le_task_name.text()
         siteName = self.ui.lb_current_site.text()
-        self.ui.le_search_keywords.setText('keyboard')
         keyWords = self.ui.le_search_keywords.text()
         if not (taskName and siteName and keyWords):
             return
-        if not self.hasSameTask(taskName):
-            debug.info('Change task name please')
+        if self.hasSameTask(taskName):
+            debug.info('Already have same task')
             return
         newTask = Task(task_name=taskName,
                        task_site_name=siteName,
                        task_search_words=keyWords,
-                       task_status=0)
+                       task_status=0,
+                       task_progress=0)
 
-        self.appendTask(taskName)
-        self.taskManager.addTask(newTask)
+        self.appendTask(newTask)
+        self.startTask(newTask)
 
-        msginfo = 'Task %s is running' % taskName
-        debug.info(msginfo)
         self.ui.le_task_name.setText("")
         self.ui.le_search_keywords.setText("")
+        self.ui.tabWidget.setCurrentIndex(1)
+
+    def startTask(self, task):
+        self.taskManager.resetDb('tasks.db')
+        task.save()
+        self.taskManager.addTask(task)
+        debug.error('new Task id %s' % task.id)
 
     def createActions(self):
         self.newTaskAct = QAction(QIcon('../resource/images/new.png'),
@@ -186,18 +266,48 @@ class MainWindow(QtWidgets.QMainWindow):
                                   statusTip="Create a new task")
         # triggered=self.newTask)
 
-    def exportToExcel(self, taskname):
-        # self.titles, self.tabmap = tabmap
+    def _promptMessage(self, msg):
+        QtWidgets.QMessageBox.about(self, "about", msg)
+
+    def stopTask(self, item):
+        self._promptMessage(item.text())
+
+    def stopTaskAll(self):
+        pass
+
+    def restartTask(self, item):
+        objs = Task.objects().filter('task_name="%s"' % item.text())
+        if objs:
+            task = MakeTaskObj(objs[0])
+            self.startTask(task)
+        
+    def deleteTask(self, item):
+        self.taskManager.resetDb('tasks.db')
+        taskName = item.text()
+        tasks = Task.objects().filter('task_name="%s"' % taskName)
+        task = MakeTaskObj(tasks[0])
+        task.task_status = '2'
+        task.save()
+        self.onTabBarClicked(2)
+
+    def deleteTaskFromDisk(self, item):
+        taskName = item.text()
+        self._promptMessage('delete from disk %s' % taskName)
+
+    def exportToExcel(self, item):
+        taskname = item.text()
+
         self.taskManager.resetDb('%s.db' % taskname)
         if taskname not in self.taskResult.keys():
             objects = Enterprise.objects().all()
+            self.taskResult[taskname] = objects
         else:
             objects = self.taskResult[taskname]
         titles = sorted(self.tabmap.items(),
                         key=lambda item: item[1])
 
         options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
+
         fileName, _ = QFileDialog.getSaveFileName(self,
                                                   "QFileDialog",
                                                   '%s.xls' % taskname,
@@ -218,7 +328,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def onUpdateProgress(self, row, col, process):
         pc = self.ui.lw_processing_tasks.cellWidget(row, col)
         pc.setValue(process)
-        debug.info('update process %d' % process)
 
     # #####################################################################
     # #### threading
@@ -226,14 +335,19 @@ class MainWindow(QtWidgets.QMainWindow):
         debug.info('start update task progress')
         while True and not self.stop:
             tasks_status = self.taskManager.running_tasks_status
-            for taskName, progress in tasks_status.items():
-                tasks = self.ui.lw_processing_tasks
-                count = tasks.rowCount()
-                for index in range(count):
-                    item = tasks.item(index, 0)
-                    name = item.text()
-                    if name == taskName:
-                        self.signalUpdateTaskProgress.emit(index, 1, progress)
+            try:
+                for taskName, progress in tasks_status.items():
+                    tasks = self.ui.lw_processing_tasks
+                    count = tasks.rowCount()
+                    for index in range(count):
+                        item = tasks.item(index, 0)
+                        name = item.text()
+                        if name == taskName:
+                            self.signalUpdateTaskProgress.emit(index,
+                                                               1,
+                                                               progress)
+            finally:
+                pass
             time.sleep(1)
 
     def guiMonitor(self):
@@ -242,6 +356,8 @@ class MainWindow(QtWidgets.QMainWindow):
         while task is not None:
             self.taskManager.resetDb('tasks.db')
             self.signalTaskCompleted.emit(task.task_name)
+            task.task_status = '1'
+            task.task_progress = '100'
             task.save()
             del self.taskManager.running_tasks_status[task.task_name]
             task = self.taskManager.popFinisedTask()

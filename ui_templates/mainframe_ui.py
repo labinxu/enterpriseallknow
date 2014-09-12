@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainframe.ui'
 #
-# Created: Thu Sep 11 21:25:09 2014
+# Created: Fri Sep 12 17:46:25 2014
 #      by: PyQt5 UI code generator 5.3.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.tab_running_tasks)
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab_running_tasks)
-        self.groupBox_2.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.groupBox_2.setMaximumSize(QtCore.QSize(280, 16777215))
         self.groupBox_2.setObjectName("groupBox_2")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.groupBox_2)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -113,7 +113,7 @@ class Ui_MainWindow(object):
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.lw_finished_tasks = QtWidgets.QListWidget(self.groupBox_3)
+        self.lw_finished_tasks = ListWidget(self.groupBox_3)
         self.lw_finished_tasks.setMaximumSize(QtCore.QSize(171, 16777215))
         self.lw_finished_tasks.setObjectName("lw_finished_tasks")
         self.verticalLayout_5.addWidget(self.lw_finished_tasks)
@@ -139,10 +139,14 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.groupBox)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 718, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 718, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
+        self.menu = QtWidgets.QMenu(self.menubar)
+        self.menu.setObjectName("menu")
+        self.menu_2 = QtWidgets.QMenu(self.menubar)
+        self.menu_2.setObjectName("menu_2")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -152,14 +156,26 @@ class Ui_MainWindow(object):
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionOpen = QtWidgets.QAction(MainWindow)
         self.actionOpen.setObjectName("actionOpen")
+        self.actionDebug = QtWidgets.QAction(MainWindow)
+        self.actionDebug.setObjectName("actionDebug")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.menuFile.addAction(self.actionOpen)
+        self.menu_2.addAction(self.actionDebug)
+        self.menu_2.addSeparator()
+        self.menu_2.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.addAction(self.menu.menuAction())
+        self.menubar.addAction(self.menu_2.menuAction())
         self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(1)
-        self.lw_finished_tasks.itemClicked['QListWidgetItem*'].connect(MainWindow.onLWFinishedTasksItemClicked)
+        self.lw_finished_tasks.itemClicked['QListWidgetItem*'].connect(MainWindow.onFinishedTasksItemClicked)
         self.pb_Ok.clicked.connect(MainWindow.onNewTask)
+        self.lw_processing_tasks.cellContextClicked['QTableWidgetItem*'].connect(MainWindow.onProcessTasksRClicked)
+        self.lw_finished_tasks.cellContextClicked['QListWidgetItem*'].connect(MainWindow.onFinishedTasksRClicked)
+        self.tabWidget.tabBarClicked['int'].connect(MainWindow.onTabBarClicked)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.lw_processing_tasks, self.tw_processing_task_details)
         MainWindow.setTabOrder(self.tw_processing_task_details, self.lw_finished_tasks)
@@ -188,8 +204,13 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_completed_tasks), _translate("MainWindow", "Completed"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_history), _translate("MainWindow", "History"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_search), _translate("MainWindow", "Search"))
-        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.menuFile.setTitle(_translate("MainWindow", "文件"))
+        self.menu.setTitle(_translate("MainWindow", "编辑"))
+        self.menu_2.setTitle(_translate("MainWindow", "帮助"))
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpen.setText(_translate("MainWindow", "open"))
+        self.actionDebug.setText(_translate("MainWindow", "调试"))
+        self.actionAbout.setText(_translate("MainWindow", "关于"))
 
-from taskrunningtable import TaskRunningTable
+from tablewidgetwithprocess import TaskRunningTable
+from listwidget import ListWidget
