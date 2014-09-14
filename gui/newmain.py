@@ -95,9 +95,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # fill the tableWidget
         finishedTasks = self.ui.tw_finished_task_details
-        self.__fillTableTitle(finishedTasks, self.tabTitles, 0)
+        self.__fillTableTitle(finishedTasks, self.tabTitles, 1)
         processingTasks = self.ui.tw_processing_task_details
-        self.__fillTableTitle(processingTasks, self.tabTitles, 0)
+        self.__fillTableTitle(processingTasks, self.tabTitles, 1)
 
         # init tab map
         for i, value in enumerate(self.tabTitles):
@@ -238,7 +238,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if not (taskName and siteName and keyWords):
             return
         if self.hasSameTask(taskName):
-            debug.info('Already have same task')
+            QtWidgets.QMessageBox.warning(self,
+                                          'Error',
+                                          'Already have same task')
             return
         newTask = Task(task_name=taskName,
                        task_site_name=siteName,

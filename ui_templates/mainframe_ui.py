@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainframe.ui'
 #
-# Created: Fri Sep 12 17:46:25 2014
+# Created: Fri Sep 12 20:02:19 2014
 #      by: PyQt5 UI code generator 5.3.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(718, 555)
+        MainWindow.resize(720, 517)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -139,7 +139,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.groupBox)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 718, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 720, 21))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -160,7 +160,13 @@ class Ui_MainWindow(object):
         self.actionDebug.setObjectName("actionDebug")
         self.actionAbout = QtWidgets.QAction(MainWindow)
         self.actionAbout.setObjectName("actionAbout")
+        self.actionDelete = QtWidgets.QAction(MainWindow)
+        self.actionDelete.setObjectName("actionDelete")
+        self.actionDeleteFromDisk = QtWidgets.QAction(MainWindow)
+        self.actionDeleteFromDisk.setObjectName("actionDeleteFromDisk")
         self.menuFile.addAction(self.actionOpen)
+        self.menu.addAction(self.actionDelete)
+        self.menu.addAction(self.actionDeleteFromDisk)
         self.menu_2.addAction(self.actionDebug)
         self.menu_2.addSeparator()
         self.menu_2.addAction(self.actionAbout)
@@ -211,6 +217,8 @@ class Ui_MainWindow(object):
         self.actionOpen.setText(_translate("MainWindow", "open"))
         self.actionDebug.setText(_translate("MainWindow", "调试"))
         self.actionAbout.setText(_translate("MainWindow", "关于"))
+        self.actionDelete.setText(_translate("MainWindow", "删除"))
+        self.actionDeleteFromDisk.setText(_translate("MainWindow", "从磁盘删除"))
 
-from tablewidgetwithprocess import TaskRunningTable
 from listwidget import ListWidget
+from tablewidgetwithprocess import TaskRunningTable
