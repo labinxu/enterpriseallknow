@@ -13,6 +13,15 @@ class TCompanyFromProduct(unittest.TestCase):
     def setUp(self):
         self.company = Company()
 
+    def testCertificatePageParser(self):
+        url = 'http://dgyijiantao.1688.com/page/creditdetail.htm#certifyInfo'
+        pageParser = CertifiactePageParser(url)
+        pageParser.parserInfo()
+        print(pageParser.contactPerson)
+        print(pageParser.mobilePhone)
+        print(pageParser.phoneNumber)
+        # print(pageParser.contactPerson)
+
     # def testCompanyFromProduct(self):
     #     from sites.ali.product import CompanyFromProduct
     #     url = 'http://s.1688.com/selloffer/offer_search.htm'
@@ -24,17 +33,17 @@ class TCompanyFromProduct(unittest.TestCase):
     #         print('=============================')
     #         company.contactInfo.displayAttributes()
 
-    def testCompanyFromSupplier(self):
-        print('testCompanyFromSupplier')
-        from sites.ali.product import ComanyBySupplier
-        url = 'http://s.1688.com/company/company_search.htm'
-        s = '袜子'
-        postdata = {'keywords': s.encode('gbk')}
-        companyfrom = ComanyBySupplier(url, postdata)
-        res = companyfrom.getCompanies()
-        for company in res:
-            print('=============================')
-            company.contactInfo.displayAttributes()
+    # def testCompanyFromSupplier(self):
+    #     print('testCompanyFromSupplier')
+    #     from sites.ali.product import ComanyBySupplier
+    #     url = 'http://s.1688.com/company/company_search.htm'
+    #     s = '袜子'
+    #     postdata = {'keywords': s.encode('gbk')}
+    #     companyfrom = ComanyBySupplier(url, postdata)
+    #     res = companyfrom.getCompanies()
+    #     for company in res:
+    #         print('=============================')
+    #         company.contactInfo.displayAttributes()
 
     # def testCompanyPageParser(self):
     #     from sites.companypage import CompanyPageParser
@@ -97,10 +106,10 @@ class TCompanyFromProduct(unittest.TestCase):
     #         pass
     #     print(len(companies))
 
-    def testAlisite(self):
-        from sites.ali.mainpage import AliSite
-        ali = AliSite()
-        for pageitem in ali.webPage.validSearchItems:
-            print(pageitem)
-        print(ali.webPage.postKeywords)
+    # def testAlisite(self):
+    #     from sites.ali.mainpage import AliSite
+    #     ali = AliSite()
+    #     for pageitem in ali.webPage.validSearchItems:
+    #         print(pageitem)
+    #     print(ali.webPage.postKeywords)
 unittest.main()

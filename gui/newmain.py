@@ -313,7 +313,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                           'Error',
                                           'Already have same task')
             return
-        
+
         newTask = Task(task_name=taskName,
                        task_site_name=siteName,
                        task_search_words=keyWords,

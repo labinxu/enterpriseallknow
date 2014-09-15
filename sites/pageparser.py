@@ -39,12 +39,11 @@ class PageParser(object):
         while counter > 0:
             try:
                 response = request.urlopen(self.pageUrl)
-                debug.output('parsing %s' % self.pageUrl)
                 html = response.read()
                 data = html.decode('gbk', 'ignore').replace('&nbsp', '')
                 data = data.encode('utf-8')
                 self.data = data
-                self.soup = BeautifulSoup(data)
+                self.soup = BeautifulSoup(markup=data)
                 return self.soup
             except Exception as e:
                 debug.error('%s %s will retry again' % (self.pageUrl, str(e)))

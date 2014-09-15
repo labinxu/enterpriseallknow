@@ -34,17 +34,21 @@ class CompanyBySearch(object):
             certifUrl = pageParser.getCertifyInfoUrl()
 
             pageParser = CertifiactePageParser(certifUrl)
+            pageParser.parserInfo()
+            ent.company_contacts = pageParser.contactPerson
+            ent.company_mobile_phone = pageParser.mobilePhone
+            ent.company_phone_number = pageParser.phoneNumber
+
             yellowpageUrl = pageParser.getYellowPageUrl()
-
             pageParser = YellowPageParser(yellowpageUrl)
-            contactUrl = pageParser.getContactInfoUrl()
 
+            contactUrl = pageParser.getContactInfoUrl()
             pageParser = ContactInfoPageParser(contactUrl)
             contactinfo = pageParser.getContactInfo()
-
-            ent.company_contacts = contactinfo.contactPerson
-            ent.company_phone_number = contactinfo.phoneNumber
-            ent.company_mobile_phone = contactinfo.mobilePhone
+            if not ent.company_mobile_phone:
+                ent.company_mobile_phone = contactinfo.mobilePhone
+            if not ent.company_phone_number:
+                ent.company_phone_number = contactinfo.phoneNumber
             ent.company_fax = contactinfo.faxNumber
             ent.company_postcode = contactinfo.postcode
             ent.company_addr = contactinfo.address
