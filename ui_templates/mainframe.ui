@@ -25,7 +25,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_new_task">
           <attribute name="title">
@@ -74,13 +74,26 @@
             <layout class="QHBoxLayout" name="horizontalLayout_5">
              <item>
               <widget class="QLabel" name="lb_task_name">
+               <property name="maximumSize">
+                <size>
+                 <width>48</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>任务名称:</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="le_task_name"/>
+              <widget class="QLineEdit" name="le_task_name">
+               <property name="maximumSize">
+                <size>
+                 <width>316</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -88,13 +101,26 @@
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
               <widget class="QLabel" name="lb_search_conditions">
+               <property name="maximumSize">
+                <size>
+                 <width>66</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>搜索关键字：</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="le_search_keywords"/>
+              <widget class="QLineEdit" name="le_search_keywords">
+               <property name="maximumSize">
+                <size>
+                 <width>420</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -419,6 +445,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lb_current_site</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onSelectSite()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>107</x>
+     <y>144</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>359</x>
+     <y>258</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <designerdata>
   <property name="gridDeltaX">
@@ -443,5 +485,6 @@
   <slot>onProcessTasksRClicked()</slot>
   <slot>onFinishedTasksRClicked()</slot>
   <slot>onTabBarClicked()</slot>
+  <slot>onSelectSite()</slot>
  </slots>
 </ui>

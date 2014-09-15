@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainframe.ui'
 #
-# Created: Fri Sep 12 20:02:19 2014
+# Created: Mon Sep 15 13:17:21 2014
 #      by: PyQt5 UI code generator 5.3.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -47,18 +47,22 @@ class Ui_MainWindow(object):
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.lb_task_name = QtWidgets.QLabel(self.tab_new_task)
+        self.lb_task_name.setMaximumSize(QtCore.QSize(48, 16777215))
         self.lb_task_name.setObjectName("lb_task_name")
         self.horizontalLayout_5.addWidget(self.lb_task_name)
         self.le_task_name = QtWidgets.QLineEdit(self.tab_new_task)
+        self.le_task_name.setMaximumSize(QtCore.QSize(316, 16777215))
         self.le_task_name.setObjectName("le_task_name")
         self.horizontalLayout_5.addWidget(self.le_task_name)
         self.gridLayout.addLayout(self.horizontalLayout_5, 0, 1, 1, 1)
         self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         self.lb_search_conditions = QtWidgets.QLabel(self.tab_new_task)
+        self.lb_search_conditions.setMaximumSize(QtCore.QSize(66, 16777215))
         self.lb_search_conditions.setObjectName("lb_search_conditions")
         self.horizontalLayout_6.addWidget(self.lb_search_conditions)
         self.le_search_keywords = QtWidgets.QLineEdit(self.tab_new_task)
+        self.le_search_keywords.setMaximumSize(QtCore.QSize(420, 16777215))
         self.le_search_keywords.setObjectName("le_search_keywords")
         self.horizontalLayout_6.addWidget(self.le_search_keywords)
         self.gridLayout.addLayout(self.horizontalLayout_6, 1, 0, 1, 2)
@@ -176,12 +180,13 @@ class Ui_MainWindow(object):
         self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.lw_finished_tasks.itemClicked['QListWidgetItem*'].connect(MainWindow.onFinishedTasksItemClicked)
         self.pb_Ok.clicked.connect(MainWindow.onNewTask)
         self.lw_processing_tasks.cellContextClicked['QTableWidgetItem*'].connect(MainWindow.onProcessTasksRClicked)
         self.lw_finished_tasks.cellContextClicked['QListWidgetItem*'].connect(MainWindow.onFinishedTasksRClicked)
         self.tabWidget.tabBarClicked['int'].connect(MainWindow.onTabBarClicked)
+        self.lb_current_site.clicked.connect(MainWindow.onSelectSite)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.lw_processing_tasks, self.tw_processing_task_details)
         MainWindow.setTabOrder(self.tw_processing_task_details, self.lw_finished_tasks)

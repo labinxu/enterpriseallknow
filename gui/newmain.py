@@ -2,6 +2,7 @@ import sys
 if '../' not in sys.path:
     sys.path.append('../')
 import os
+import math
 import threading
 import time
 from PyQt5 import QtWidgets
@@ -13,12 +14,51 @@ from utils import debug
 from typesdefine import (Task, MakeTaskObj, Enterprise)
 from manager.taskmanager import TaskManager
 from ui_templates.mainframe_ui import Ui_MainWindow
+from ui_templates.site_select_dlg import Ui_Dialog
 from multiprocessing import freeze_support
 from functools import partial
+from appconfig import appconfig
 # for cx_freeze fixed
 sys.stdout = open('run.log', 'a')
 sys.stderr = sys.stdout
 freeze_support()
+
+
+def PromptMessage(self, msg):
+        QtWidgets.QMessageBox.about(self, "about", msg)
+
+
+class SiteSelect(QtWidgets.QDialog):
+    def __init__(self, parent=None, language_index=1):
+        super(SiteSelect, self).__init__(parent)
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        self.lanugageIndex = language_index
+        self.sites = appconfig.getSites()
+        self.initSites()
+
+    def onCellClicked(self, row, col):
+        self.currentSelectedItem = self.ui.tw_sites.item(row, col)
+        self.accept()
+
+    def currentSelectItem(self):
+        return self.currentSelectedItem
+
+    def initSites(self):
+        row = 0
+        col = 0
+        size = len(self.sites)
+        countRow = math.ceil(size/3)
+        self.ui.tw_sites.setRowCount(countRow)
+        self.ui.tw_sites.setColumnCount(3)
+        for index, site in enumerate(self.sites):
+            if index != 0 and index % 3 == 0:
+                row += 1
+                col = 0
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(site[self.lanugageIndex])
+            self.ui.tw_sites.setItem(row, col, item)
+            col += 1
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -35,16 +75,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.stop = False
         self.tabmap = {}
 
+        # conf
+        # ###################################
+        self.changeStyle('Windows')
+        self.language = appconfig.getLanguage()
+        self.lanugageIndex = self.language == 'english' and 0 or 1
+        self.sites = appconfig.getSites()
+        # tab initNewTaskTab
+        self.initNewTaskTab()
+        # ############################################
         self.createActions()
         self.createToolbar()
         self.initTableTitles()
         self.initSignals()
-        self.changeStyle('Windows')
-
-        # ###################################
         self.signalCreatedSuccessful.connect(self.onCreatedSuccessful)
+        # ###################################
         self.signalCreatedSuccessful.emit()
-
         # for dbug
         # self.appendTask('task1')
         # self.appendTask('task2')
@@ -52,6 +98,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.appendFinished('finishedTask1')
         # self.appendFinished('finishedTask2')
         # self.appendFinished('finishedTask3')
+
+    def initNewTaskTab(self):
+        self.ui.lb_current_site.setText(self.sites[0][self.lanugageIndex])
 
     @pyqtSlot()
     def on_actionDebug_triggered(self):
@@ -95,9 +144,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # fill the tableWidget
         finishedTasks = self.ui.tw_finished_task_details
-        self.__fillTableTitle(finishedTasks, self.tabTitles, 1)
+        self.__fillTableTitle(finishedTasks,
+                              self.tabTitles,
+                              self.lanugageIndex)
+        
         processingTasks = self.ui.tw_processing_task_details
-        self.__fillTableTitle(processingTasks, self.tabTitles, 1)
+        self.__fillTableTitle(processingTasks,
+                              self.tabTitles,
+                              self.lanugageIndex)
 
         # init tab map
         for i, value in enumerate(self.tabTitles):
@@ -230,10 +284,27 @@ class MainWindow(QtWidgets.QMainWindow):
             return True
         return False
 
+    def onSelectSite(self):
+        siteSelect = SiteSelect(self)
+        siteSelect.exec_()
+        item = siteSelect.currentSelectItem()
+        if item:
+            self.ui.lb_current_site.setText(item.text())
+        else:
+            self.onSelectSite()
+
+    def getSearchModule(self, siteName):
+        for site in self.sites:
+            if siteName == site[self.lanugageIndex]:
+                self._promptMessage(site[0])
+                return site[0]
+        
     def onNewTask(self):
 
         taskName = self.ui.le_task_name.text()
         siteName = self.ui.lb_current_site.text()
+        siteName = self.getSearchModule(siteName)
+
         keyWords = self.ui.le_search_keywords.text()
         if not (taskName and siteName and keyWords):
             return
@@ -242,6 +313,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                           'Error',
                                           'Already have same task')
             return
+        
         newTask = Task(task_name=taskName,
                        task_site_name=siteName,
                        task_search_words=keyWords,
