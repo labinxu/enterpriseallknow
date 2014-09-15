@@ -66,7 +66,6 @@ class AliSite(object):
         product = CompanyFromProduct(url, postdata)
         page, maxpage = product.getFirstPageData()
         pages = []
-        debug.info('maxpage %s' % maxpage)
         pages.append(page)
         # for debug, in release please remove counter
         counter = 3

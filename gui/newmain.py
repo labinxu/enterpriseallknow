@@ -296,7 +296,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def getSearchModule(self, siteName):
         for site in self.sites:
             if siteName == site[self.lanugageIndex]:
-                self._promptMessage(site[0])
                 return site[0]
         
     def onNewTask(self):

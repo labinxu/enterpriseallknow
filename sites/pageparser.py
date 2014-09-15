@@ -12,6 +12,7 @@ class PageParser(object):
         self.pageUrl = pageurl
         self.soup = None
         self.data = None
+        self.mobilePhone = None
 
     def _findItemByAttrs(self, attrs):
         soup = self.getSoup()
@@ -25,7 +26,6 @@ class PageParser(object):
         while counter > 0:
             try:
                 response = request.urlopen(self.pageUrl)
-                debug.output('parsing %s' % self.pageUrl)
                 html = response.read()
                 data = html.decode('gbk', 'ignore').replace('&nbsp', '')
                 data = data.encode('utf-8')

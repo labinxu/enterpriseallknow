@@ -14,7 +14,8 @@ class TCompanyFromProduct(unittest.TestCase):
         self.company = Company()
 
     def testCertificatePageParser(self):
-        url = 'http://dgyijiantao.1688.com/page/creditdetail.htm#certifyInfo'
+        url = 'http://gzchaohe.1688.com/page/creditdetail.htm#certifyInfo'
+        #url = 'http://dgyijiantao.1688.com/page/creditdetail.htm#certifyInfo'
         pageParser = CertifiactePageParser(url)
         pageParser.parserInfo()
         print(pageParser.contactPerson)
